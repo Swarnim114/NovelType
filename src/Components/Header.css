@@ -1,0 +1,63 @@
+:root {
+    /* Color Palette */
+    --background-color: #272822;
+    --text-color: #F8F8F2;
+    --primary-color: #66D9EF; /* Light Blue */
+    --secondary-color: #A6E22E; /* Light Green */
+    --accent-color: #FD971F; /* Orange */
+    --muted-color: #75715E; /* Comment color */
+    --border-color: #49483E;
+
+    /* Font Settings */
+    --font-family: 'Monaco', 'Courier New', monospace;
+    --font-size-small: 1rem; /* 16px */
+    --font-size-medium: 1.25rem; /* 20px */
+    --font-size-large: 1.5rem; /* 24px */
+}
+
+.header-container {
+    width: 100vw;
+    padding: 1vh 1vw;
+    background-color: var(--background-color);
+    border-bottom: 0.2vh solid var(--border-color);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 90vw;
+    margin: 0 auto;
+}
+
+.site-logo-name {
+    font-family: var(--font-family);
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--text-color);
+    cursor: pointer;
+
+}
+
+.header-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header-nav li {
+    margin-left: 2vw;
+}
+
+.header-nav a {
+    font-family: var(--font-family);
+    font-size: var(--font-size-medium);
+    color:var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header-nav a:hover {
+    color: var(--primary-color); /* Light blue hover effect similar to Monokai theme */
+}

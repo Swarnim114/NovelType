@@ -1,0 +1,20 @@
+:root {
+    /* Color Palette */
+    --background-color: #272822;
+    --text-color: #F8F8F2;
+    --primary-color: #66D9EF; /* Light Blue */
+    --secondary-color: #A6E22E; /* Light Green */
+    --accent-color: #FD971F; /* Orange */
+    --muted-color: #75715E; /* Comment color */
+    --red-color: #F92672; /* Red for errors, important keywords */
+    --yellow-color: #E6DB74; /* Yellow for numbers, constants */
+    --cyan-color: #66D9EF; /* Cyan for keywords, variables */
+    --magenta-color: #AE81FF; /* Magenta for special variables */
+    --border-color: #49483E;
+
+    /* Font Settings */
+    --font-family: 'Monaco', 'Courier New', monospace;
+    --font-size-small: 12px;
+    --font-size-medium: 16px;
+    --font-size-large: 20px;
+}
