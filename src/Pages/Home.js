@@ -7,16 +7,18 @@ const Home = () => {
   const [userInput, setUserInput] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isTestStarted, setIsTestStarted] = useState(false);
+  const [isTestEnded, setIsTestEnded] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState(100);
+  const [testDuration, setTestDuration] = useState(60);
   const textDisplayRef = useRef(null);
 
   useEffect(() => {
     if (isTestStarted && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (timeLeft === 0) {
+    } else if (timeLeft === 0 ) {
       endTest();
     }
   }, [isTestStarted, timeLeft]);
@@ -27,12 +29,30 @@ const Home = () => {
     }
   }, [userInput, isTestStarted]);
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleSpaceKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleSpaceKeyPress);
+    };
+  }, [isTestStarted, isTestEnded]);
+
+  const handleSpaceKeyPress = (e) => {
+    if (e.code === 'Space') {
+      if (!isTestStarted && !isTestEnded) {
+        startTest();
+      } else if (isTestEnded) {
+        resetTest();
+      }
+    }
+  };
+
   const startTest = () => {
     setIsTestStarted(true);
+    setIsTestEnded(false);
     setText(generateText(200));
     setUserInput('');
     setCursorPosition(0);
-    setTimeLeft(60);
+    setTimeLeft(testDuration);
     setWpm(0);
     setAccuracy(100);
     if (textDisplayRef.current) textDisplayRef.current.focus();
@@ -40,14 +60,20 @@ const Home = () => {
 
   const endTest = () => {
     setIsTestStarted(false);
+    setIsTestEnded(true);
     calculateWpmAndAccuracy();
+  };
+
+  const resetTest = () => {
+    setIsTestEnded(false);
+    startTest();
   };
 
   const calculateWpmAndAccuracy = () => {
     const words = userInput.trim().split(' ').length;
     const characters = userInput.length;
-    const minutes = (60 - timeLeft) / 60;
-    const calculatedWpm = Math.round(words / minutes);
+    const minutes = (testDuration - timeLeft) / 60;
+    const calculatedWpm = Math.round(words / minutes) || 0;
     setWpm(calculatedWpm);
 
     let correctChars = 0;
@@ -59,7 +85,7 @@ const Home = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (!isTestStarted) return;
+    if (!isTestStarted || isTestEnded) return;
 
     if (e.key === 'Backspace') {
       setUserInput(prev => prev.slice(0, -1));
@@ -71,6 +97,17 @@ const Home = () => {
   };
 
   const renderText = () => {
+    if (isTestEnded) {
+      return (
+        <div className="results">
+          <h2>Test Results</h2>
+          <p>WPM: {wpm}</p>
+          <p>Accuracy: {accuracy}%</p>
+          <p>Press space to restart</p>
+        </div>
+      );
+    }
+
     return text.split('').map((char, index) => {
       let className = 'char';
       if (index < userInput.length) {
@@ -83,9 +120,19 @@ const Home = () => {
     });
   };
 
+  const changeTestDuration = (duration) => {
+    setTestDuration(duration);
+    setTimeLeft(duration);
+  };
+
   return (
     <div className="home-container">
-      <h1 className="title">Monkeytype Clone</h1>
+      <div className="test-options">
+        <button onClick={() => changeTestDuration(10)}>10s</button>
+        <button onClick={() => changeTestDuration(15)}>15s</button>
+        <button onClick={() => changeTestDuration(30)}>30s</button>
+        <button onClick={() => changeTestDuration(60)}>1m</button>
+      </div>
       <div
         className="text-display"
         ref={textDisplayRef}
@@ -99,12 +146,15 @@ const Home = () => {
         <span>WPM: {wpm}</span>
         <span>Accuracy: {accuracy}%</span>
       </div>
+      {!isTestStarted && !isTestEnded && (
+        <p>Press space to start the test</p>
+      )}
       <button
         className="start-btn"
         onClick={startTest}
         disabled={isTestStarted}
       >
-        {isTestStarted ? 'Test in progress...' : 'Start Test'}
+        Start Test
       </button>
     </div>
   );
