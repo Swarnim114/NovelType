@@ -18,7 +18,7 @@ const Home = () => {
     if (isTestStarted && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (timeLeft === 0 ) {
+    } else if (timeLeft === 0) {
       endTest();
     }
   }, [isTestStarted, timeLeft]);
@@ -29,22 +29,30 @@ const Home = () => {
     }
   }, [userInput, isTestStarted]);
 
+  // Ensure the text display has focus when the test starts
   useEffect(() => {
+    if (isTestStarted && textDisplayRef.current) {
+      textDisplayRef.current.focus();
+    }
+  }, [isTestStarted]);
+
+  // Handle the spacebar to start/restart the test
+  useEffect(() => {
+    const handleSpaceKeyPress = (e) => {
+      if (e.code === 'Enter') {
+        if (!isTestStarted && !isTestEnded) {
+          startTest();
+        } else if (isTestEnded) {
+          resetTest();
+        }
+      }
+    };
+
     window.addEventListener('keydown', handleSpaceKeyPress);
     return () => {
       window.removeEventListener('keydown', handleSpaceKeyPress);
     };
   }, [isTestStarted, isTestEnded]);
-
-  const handleSpaceKeyPress = (e) => {
-    if (e.code === 'Space') {
-      if (!isTestStarted && !isTestEnded) {
-        startTest();
-      } else if (isTestEnded) {
-        resetTest();
-      }
-    }
-  };
 
   const startTest = () => {
     setIsTestStarted(true);
@@ -70,17 +78,17 @@ const Home = () => {
   };
 
   const calculateWpmAndAccuracy = () => {
-    const words = userInput.trim().split(' ').length;
+    const words = userInput.trim().split(/\s+/).length; // Improved word count handling
     const characters = userInput.length;
     const minutes = (testDuration - timeLeft) / 60;
-    const calculatedWpm = Math.round(words / minutes) || 0;
+    const calculatedWpm = minutes > 0 ? Math.round(words / minutes) : 0;
     setWpm(calculatedWpm);
 
     let correctChars = 0;
     for (let i = 0; i < characters; i++) {
       if (userInput[i] === text[i]) correctChars++;
     }
-    const calculatedAccuracy = Math.round((correctChars / characters) * 100) || 100;
+    const calculatedAccuracy = characters > 0 ? Math.round((correctChars / characters) * 100) : 100;
     setAccuracy(calculatedAccuracy);
   };
 
@@ -103,7 +111,7 @@ const Home = () => {
           <h2>Test Results</h2>
           <p>WPM: {wpm}</p>
           <p>Accuracy: {accuracy}%</p>
-          <p>Press space to restart</p>
+          <p>Press Enter to restart</p>
         </div>
       );
     }
