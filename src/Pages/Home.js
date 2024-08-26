@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Home.css';
 import { generateText } from './textUtils';
+import Header from "../Components/Header";
 
 const Home = () => {
   const [text, setText] = useState('');
@@ -12,73 +13,94 @@ const Home = () => {
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState(100);
   const [testDuration, setTestDuration] = useState(60);
+  const [timerStarted, setTimerStarted] = useState(false);
   const textDisplayRef = useRef(null);
 
   useEffect(() => {
-    if (isTestStarted && timeLeft > 0) {
+    if (isTestStarted && timerStarted && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     } else if (timeLeft === 0) {
       endTest();
     }
-  }, [isTestStarted, timeLeft]);
+  }, [isTestStarted, timerStarted, timeLeft]);
 
   useEffect(() => {
-    if (isTestStarted) {
+    if (isTestStarted && timerStarted) {
       calculateWpmAndAccuracy();
     }
-  }, [userInput, isTestStarted]);
+  }, [userInput, isTestStarted, timerStarted]);
 
-  // Ensure the text display has focus when the test starts
   useEffect(() => {
     if (isTestStarted && textDisplayRef.current) {
       textDisplayRef.current.focus();
     }
   }, [isTestStarted]);
 
-  // Handle the spacebar to start/restart the test
   useEffect(() => {
-    const handleSpaceKeyPress = (e) => {
+    const handleKeyPress = (e) => {
       if (e.code === 'Enter') {
         if (!isTestStarted && !isTestEnded) {
+          setTimeLeft(testDuration); // Make sure the correct test duration is set
           startTest();
         } else if (isTestEnded) {
-          resetTest();
+          resetTest(); // Reset first
+          setTimeout(() => startTest(), 0); // Start immediately after reset
         }
+      } else if (e.code === 'Space') {
+        e.preventDefault(); // Prevent spacebar from scrolling the page
+      } else if (e.code === 'Escape' && isTestStarted) {
+        resetTest();
+      } else if (!timerStarted && isTestStarted) {
+        setTimerStarted(true); // Start the timer on the first key press
       }
     };
 
-    window.addEventListener('keydown', handleSpaceKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
     return () => {
-      window.removeEventListener('keydown', handleSpaceKeyPress);
+      window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [isTestStarted, isTestEnded]);
+  }, [isTestStarted, isTestEnded, timerStarted, testDuration]);
+
+  const changeTestDuration = (duration) => {
+    setTestDuration(duration);
+    if (!isTestStarted) {
+      setTimeLeft(duration); // Update timeLeft only if the test hasn’t started
+    }
+  };
 
   const startTest = () => {
     setIsTestStarted(true);
     setIsTestEnded(false);
-    setText(generateText(200));
+    setText(generateText(300));
     setUserInput('');
     setCursorPosition(0);
-    setTimeLeft(testDuration);
+    setTimeLeft(testDuration); // Use the updated test duration
     setWpm(0);
     setAccuracy(100);
+    setTimerStarted(false); // Reset the timer flag
     if (textDisplayRef.current) textDisplayRef.current.focus();
+  };
+
+  const resetTest = () => {
+    setIsTestStarted(false);
+    setIsTestEnded(false);
+    setUserInput('');
+    setCursorPosition(0);
+    setTimeLeft(testDuration); // Use the updated test duration
+    setWpm(0);
+    setAccuracy(100);
+    setTimerStarted(false); // Reset the timer flag
   };
 
   const endTest = () => {
     setIsTestStarted(false);
     setIsTestEnded(true);
-    calculateWpmAndAccuracy();
-  };
-
-  const resetTest = () => {
-    setIsTestEnded(false);
-    startTest();
+    calculateWpmAndAccuracy(); // Ensure the final stats are updated
   };
 
   const calculateWpmAndAccuracy = () => {
-    const words = userInput.trim().split(/\s+/).length; // Improved word count handling
+    const words = userInput.trim().split(/\s+/).length;
     const characters = userInput.length;
     const minutes = (testDuration - timeLeft) / 60;
     const calculatedWpm = minutes > 0 ? Math.round(words / minutes) : 0;
@@ -128,13 +150,9 @@ const Home = () => {
     });
   };
 
-  const changeTestDuration = (duration) => {
-    setTestDuration(duration);
-    setTimeLeft(duration);
-  };
-
   return (
     <div className="home-container">
+
       <div className="test-options">
         <button onClick={() => changeTestDuration(10)}>10s</button>
         <button onClick={() => changeTestDuration(15)}>15s</button>
@@ -155,7 +173,7 @@ const Home = () => {
         <span>Accuracy: {accuracy}%</span>
       </div>
       {!isTestStarted && !isTestEnded && (
-        <p>Press space to start the test</p>
+        <p>Press Enter to start the test</p>
       )}
       <button
         className="start-btn"
