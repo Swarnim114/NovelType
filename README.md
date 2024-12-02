@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+# ⌨️ Typing Practice Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📖 **Overview**
 
-## Available Scripts
+This is a typing practice website inspired by platforms like **MonkeyType**, designed to improve your typing speed and accuracy. Built using **React**, the app generates random paragraphs for typing practice and allows you to set custom time limits.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🌟 **Features**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Random Paragraphs**: Provides a variety of random paragraphs to practice typing.
+- **Custom Time Limits**: Users can select their desired typing duration (e.g., 30 seconds, 1 minute, etc.).
+- **Real-time Stats**: Displays live updates of typing speed (WPM) and accuracy during the session.
+- **User-friendly Interface**: Minimalistic and clean design for a distraction-free typing experience.
+- **Responsive Design**: Works seamlessly on both desktop and mobile devices.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🔧 **Technologies Used**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **React**: For building the interactive front-end.
+- **CSS**: For creating a visually appealing and responsive layout.
+- **JavaScript**: For implementing functionality and logic.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🚀 **How to Run the Project Locally**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Clone the repository**:
+   ```bash
+   git@github.com:Swarnim114/NovelType.git
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. **Navigate to the project directory**:
+   ```bash
+   cd NovelType
+   ```
 
-### `npm run eject`
+3. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+4. **Start the development server**:
+   ```bash
+   npm start
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   The app will open at [http://localhost:3000](http://localhost:3000).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 💡 **How It Works**
 
-## Learn More
+1. **Start a Session**: Select a time limit and start typing the displayed paragraph.
+2. **Real-time Feedback**: As you type, the app calculates:
+   - **Words per Minute (WPM)**: Tracks your typing speed.
+   - **Accuracy**: Measures how accurately you typed compared to the given paragraph.
+3. **Session End**: At the end of the session, your final WPM and accuracy are displayed.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📷 **Screenshots & Demo**
 
-### Code Splitting
+### Live Link
+[Click here to visit the live site](https://novel-type.vercel.app/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Screenshot 1
+![Screenshot of Typing Screen](https://github.com/user-attachments/assets/6106c481-ebde-4210-bc73-5a307dda8333)
 
-### Analyzing the Bundle Size
+### Screenshot 2
+![Screenshot of Results Page](https://github.com/user-attachments/assets/e53bce26-9259-4919-9754-ba5e8b0bdf95)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Screenshot 2
+![Screenshot of Results Page](https://github.com/user-attachments/assets/cc4525f0-dd02-4ad7-9b73-002c3fe199a8)
+---
